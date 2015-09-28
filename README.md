@@ -1,4 +1,7 @@
-[![Build Status](https://api.travis-ci.org/predictionmachines/Filzbach.svg)] (https://travis-ci.org/predictionmachines/Filzbach)
+[![Build Status](https://api.travis-ci.org/predictionmachines/Filzbach.svg)](https://travis-ci.org/predictionmachines/Filzbach)
+[![Build status](https://ci.appveyor.com/api/projects/status/b5w7f2wcvgtj24bw?svg=true)](https://ci.appveyor.com/project/vassilyl/filzbach)
+
+
 #Filzbach
 
 _Fit complex models to hetereogenous data: Bayesian and likelihood analysis made easy_
