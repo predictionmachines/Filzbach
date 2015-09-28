@@ -1,0 +1,4 @@
+language: cpp
+script:
+ - cd examples
+ - make examples
