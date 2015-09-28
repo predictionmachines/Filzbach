@@ -1,0 +1,13 @@
+Package: filzbach
+Type: Package
+Title: Filzbach MCMC sampler
+Version: 0.7-1
+Date: 2015-07-04
+Author: Vassily Lyutsarev [aut, cre],
+  Drew Purves [aut] (creator of the original filzbach C code)
+Maintainer: Vassily Lyutsarev<vassilyl@microsoft.com>
+Description: Filzbach is a flexible, fast, robust, parameter estimation engine that allows you to parameterize arbitrary, 
+	non-linear models, of the kind that are necessary in biological sciences, against multiple, heterogeneous data sets. 
+	Filzbach allows for Bayesian parameter estimation, maximum likelihood analysis, priors, latents, 
+	hierarchies, error propagation and model selection, from just a few lines of code.
+License: MIT + file LICENSE

@@ -1,0 +1,2 @@
+export(runMCMC)
+useDynLib(filzbach)

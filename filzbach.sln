@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filzbach", "filzbach\filzbach.vcxproj", "{9045983A-4AE5-4C6A-ACDB-D9FE0AC15D6C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "examples", "examples\examples.vcxproj", "{2A99590C-1AD1-410C-937E-3D46133AF087}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B0675CCE-F679-4977-B64D-AD4E11A304B9}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{02DCA7CA-2A55-457F-AE34-724DF969E037}"
+	ProjectSection(SolutionItems) = preProject
+		include\filzbach.h = include\filzbach.h
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release_DLL|Win32 = Release_DLL|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9045983A-4AE5-4C6A-ACDB-D9FE0AC15D6C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9045983A-4AE5-4C6A-ACDB-D9FE0AC15D6C}.Debug|Win32.Build.0 = Debug|Win32
+		{9045983A-4AE5-4C6A-ACDB-D9FE0AC15D6C}.Release_DLL|Win32.ActiveCfg = Release_DLL|Win32
+		{9045983A-4AE5-4C6A-ACDB-D9FE0AC15D6C}.Release_DLL|Win32.Build.0 = Release_DLL|Win32
+		{9045983A-4AE5-4C6A-ACDB-D9FE0AC15D6C}.Release|Win32.ActiveCfg = Release|Win32
+		{9045983A-4AE5-4C6A-ACDB-D9FE0AC15D6C}.Release|Win32.Build.0 = Release|Win32
+		{2A99590C-1AD1-410C-937E-3D46133AF087}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2A99590C-1AD1-410C-937E-3D46133AF087}.Debug|Win32.Build.0 = Debug|Win32
+		{2A99590C-1AD1-410C-937E-3D46133AF087}.Release_DLL|Win32.ActiveCfg = Release_DLL|Win32
+		{2A99590C-1AD1-410C-937E-3D46133AF087}.Release_DLL|Win32.Build.0 = Release_DLL|Win32
+		{2A99590C-1AD1-410C-937E-3D46133AF087}.Release|Win32.ActiveCfg = Release|Win32
+		{2A99590C-1AD1-410C-937E-3D46133AF087}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
