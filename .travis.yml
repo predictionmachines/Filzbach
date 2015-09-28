@@ -1,4 +1,8 @@
 language: cpp
+addons:
+  apt:
+    packages:
+    - g++-4.9
 script:
- - cd examples
- - make examples
+- cd examples
+- make examples
