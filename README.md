@@ -53,8 +53,8 @@ make
 
 The repository contains several sample programs that illustrate how to apply Filzbach to different kinds of models.
 
-Id| Name | Desciption
---|------|-------------
+Id | Name | Desciption
+---|------|-------------
 1 | normal | How to learn parameters of a normal distribution
 2 | normal_priors | How to set up priors
 3 | mixednormal | Learn the location and width of several peaks 
