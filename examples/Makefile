@@ -1,4 +1,4 @@
-CPPFLAGS = -I../include -L../filzbach -DFILZBACH_LIB -std=c++11
+CPPFLAGS = -I../include -L../filzbach -DFILZBACH_LIB -std=c++0x
 
 examples = normal priors mixednormal poisson multispp lr regression stepfunction plantgrowth seedrain SDM ProteinInteraction TreeMort
 deps = examples.h preamble.h ../include/filzbach.h ../filzbach/libfilzbach.a

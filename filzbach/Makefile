@@ -1,4 +1,4 @@
-CPPFLAGS = -I../include -DFILZBACH_LIB -std=c++11
+CPPFLAGS = -I../include -DFILZBACH_LIB -std=c++0x
 objects = catherine_loader.o metropolis.o params.o stats.o table.o
 libfilzbach.a: $(objects)
 	ar rs libfilzbach.a $(objects)
