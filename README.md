@@ -4,7 +4,7 @@
 
 #Filzbach
 
-_Fit complex models to hetereogenous data: Bayesian and likelihood analysis made easy_
+_Fit complex models to heterogeneous data: Bayesian and likelihood analysis made easy_
 
 Filzbach is a flexible, fast, robust, parameter estimation engine
 that allows you to parameterize arbitrary, non-linear models,
