@@ -45,7 +45,11 @@ template <size_t size>
 int sprintf_s(
    char (&buffer)[size],
    const char *format, ... 
-) {va_list vargs; return snprintf(buffer, size, format, vargs);}
+	) {
+	va_list vargs; 
+	va_start(vargs);  
+	return snprintf(buffer, size, format, vargs);
+}
 #endif
 
 #endif // TDAFX_H_H 

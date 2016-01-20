@@ -892,10 +892,10 @@ double parameter_getvalue(int ii)
 /***************************************************************************/
 int parameter_returnindex(const char name[])
 {
-	int mm,hits=0,hitmm;
+	int hits=0,hitmm=-1;
 
 	param* params = current_para();
-	for(mm=0 ; mm<paramcount ; mm++)
+	for(int mm=0 ; mm<paramcount ; mm++)
 	{
 		if(strcmp(params[mm].name,name)==0)
 		{
@@ -1111,7 +1111,7 @@ void init_chains(int chaincount)
 			mpara[c][p].MLEu68 = 0.0;
 			mpara[c][p].MLEu95 = 0.0;
 			mpara[c][p].alt = 0;
-			mpara[c][p].decis;
+			mpara[c][p].decis = 0;
 			mpara[c][p].delta = 0.0;
 			mpara[c][p].pold = 0.0;
 			mpara[c][p].padd = 0.0;

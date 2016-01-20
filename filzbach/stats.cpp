@@ -1179,7 +1179,7 @@ int random_integer(int lb, int ub)
 
 double large(double value[], int lid, int uid, int num)
 {
-	int nn,ii,used[100001],maxid,hits;
+	int nn,ii,used[100001],maxid=0,hits;
 	double maxval = log(0.0); // -Infinity
 
 	if(uid>100000)
@@ -1219,7 +1219,7 @@ double large(double value[], int lid, int uid, int num)
 /***********************************************/
 double large(float value[], int lid, int uid, int num)
 {
-	int nn,ii,used[100001],maxid,hits;
+	int nn,ii,used[100001],maxid=0,hits;
 	double maxval = log(0.0); // -Infinity
 
 	if(uid>100000)
@@ -1259,7 +1259,7 @@ double large(float value[], int lid, int uid, int num)
 /***********************************************/
 double large(int value[], int lid, int uid, int num)
 {
-	int nn,ii,used[100001],maxid,hits;
+	int nn,ii,used[100001],maxid=0,hits;
 	int maxval = value[0]-1;
 	for (int i=1; i<lid; i++) if (maxval>=value[i]) maxval=value[i]-1;
 
