@@ -41,6 +41,7 @@ const char ws_dir[] = "./workspace";
 #ifndef WIN32
 #define strcpy_s(dest,bufsize,source) strncpy(dest,source,bufsize)
 #define strcat_s(dest,bufsize,source) strncat(dest,source,bufsize)
+#include <cstdarg>
 template <size_t size>
 int sprintf_s(
    char (&buffer)[size],
@@ -48,7 +49,7 @@ int sprintf_s(
 	) {
 	va_list vargs; 
 	va_start(vargs, format);  
-	return snprintf(buffer, size, format, vargs);
+	return vsnprintf(buffer, size, format, vargs);
 }
 #endif
 
