@@ -353,7 +353,7 @@ void init_bayestable(int space1, int space2)
 * Fills the datastructure for the bayesian posterior averages.
 * Each chain requires its own table.
 */
-void fill_bayestable(int chain, long int metr_k)
+void fill_bayestable(int chain, long int iter)
 {
 	ASSERT(chain >= 0 && chain < chaincount, "Index out of range")
 		int pos;
@@ -364,7 +364,7 @@ void fill_bayestable(int chain, long int metr_k)
 	if (pos < bayestable_length_extras)
 	{
 
-		bayestable[chain][pos][0] = metr_k;
+		bayestable[chain][pos][0] = iter;
 		bayestable[chain][pos][1] = ltotnew[chain] + ptotnew[chain];
 		bayestable[chain][pos][2] = ltotnew[chain];
 		param* mpara = current_para(chain);
@@ -377,7 +377,7 @@ void fill_bayestable(int chain, long int metr_k)
 	}
 	else
 	{
-		printf("\n fill chain-specific bayestable exceeding table length, metr_k is %ld pos is %d \n", metr_k, bayespos[chain]);
+		printf("\n fill chain-specific bayestable exceeding table length, iteration %ld, iteration %d pos is %d \n", iter, chain, bayespos[chain]);
 		// system("pause");
 	}
 }
@@ -739,19 +739,19 @@ void consolidateChains()
 
 
 
-void screenOutput(int metr_k, int burnin, int eststeps, int burnin2, int mleexp)
+void screenOutput(int iter, int burnin, int eststeps, int burnin2)
 {
-	printf("\n ************ CHAIN %d ITERATION %d *****************", currentchain, metr_k);
+	printf("\n ************ CHAIN %d ITERATION %d *****************", currentchain, iter);
 
-	if (metr_k <= burnin)
+	if (iter <= burnin)
 	{
 		printf("\n Phase: burn-in");
 	}
-	else if (metr_k < (burnin + eststeps))
+	else if (iter < (burnin + eststeps))
 	{
 		printf("\n Phase: sampling");
 	}
-	else if (metr_k < (burnin + eststeps + burnin2))
+	else if (iter < (burnin + eststeps + burnin2))
 	{
 		printf("\n Phase: MLE search");
 	}
@@ -1850,7 +1850,7 @@ void runmcmc(int tburnin, int teststeps, int tburnin2, int tmleexp)
 			{
 #pragma omp critical
 			{
-				screenOutput(metr_k, burnin, eststeps, burnin2, mleexp);
+				screenOutput(metr_k, burnin, eststeps, burnin2);
 			}
 			}
 

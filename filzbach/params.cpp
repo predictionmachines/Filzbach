@@ -154,7 +154,7 @@ void parameter_create_vector(const char name[], double lb, double ub, double val
 double cv(const char name[])
 {
 	int hits=0;
-	int hitmm;
+	int hitmm=0;
 
 	for(int mm=0 ; mm < paramcount ; mm++)
 	{
