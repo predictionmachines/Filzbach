@@ -39,6 +39,8 @@ const char ws_dir[] = "./workspace";
 
 
 #ifndef WIN32
+#define __max(a,b) (((a) > (b)) ? (a) : (b))
+#define __min(a,b) (((a) < (b)) ? (a) : (b))
 #define strcpy_s(dest,bufsize,source) strncpy(dest,source,bufsize)
 #define strcat_s(dest,bufsize,source) strncat(dest,source,bufsize)
 #include <cstdarg>
