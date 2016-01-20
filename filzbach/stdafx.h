@@ -47,7 +47,7 @@ int sprintf_s(
    const char *format, ... 
 	) {
 	va_list vargs; 
-	va_start(vargs);  
+	va_start(vargs, format);  
 	return snprintf(buffer, size, format, vargs);
 }
 #endif
