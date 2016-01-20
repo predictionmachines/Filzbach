@@ -11,12 +11,10 @@
 #define _USE_MATH_DEFINES
 #define _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES 1
 
-#include "targetver.h"
-
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <cmath>
 #include <memory>
 #include <limits>
 const double MISSING_VALUE = -999.0;
