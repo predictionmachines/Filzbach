@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <assert.h>
+#include <cassert>
 #include "dwp_stats.h"
 #include "dwp_metropolis.h"
 #include "params.h"
@@ -19,7 +19,7 @@ inline int _mkdir(const char* dirname) { mkdir(dirname, 0777); }
 #ifdef _OPENMP
 #include <omp.h>
 #endif
-#include "time.h"
+#include <ctime>
 
 #include <vector>
 #include <algorithm>
@@ -183,11 +183,7 @@ FILE* workspace_fopen(const char* name, const char* options)
 #pragma warning(disable:4996)
 	FILE* result = fopen(outbuf, options);
 #pragma warning(pop)
-	if (!result)
-	{
-		printf("\n couldn't open output file bayes file, name %s \n", outbuf);
-		exit(1);
-	}
+	CHECK(result,"couldn't open output file")
 	return result;
 }
 

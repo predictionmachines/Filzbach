@@ -57,20 +57,20 @@ double lognormal_density(double x, double mode, double stdev)
  *
  * mode - the maximum likelihood for the distribution
  * stdev - the standard deviation of the distribution to draw from in log space
- */ 
+ */
 double lognormal_draw(double mode, double stdev)
 {
 	return exp(normal_draw(log(mode), stdev));
 }
 
-/* 
- * Eponential distribution, describing events occur randonmly over time. 
+/*
+ * Eponential distribution, describing events occur randonmly over time.
  *
  * a(lpha) - a > 0, rate paramter
  * x - within 0 <= x < oo
  */
- double exponential_rate(double x, double a)
- {
+double exponential_rate(double x, double a)
+{
 	if (a <= 0)
 	{
 		printf("Error: Paramter a for exponential_density(double x, double a) must be greater than 0.");
@@ -84,29 +84,29 @@ double lognormal_draw(double mode, double stdev)
 	}
 
 	return a * exp(-a * x);
- }
+}
 
 /*
  * Exponential density, using mean instead of the distribution paramter alpha with
  * mean = 1 / alpha.
  */
- double exponential_density(double x, double mean)
- {
-	 double a = 1 / mean;
-	 return exponential_rate(x, a);
- }
+double exponential_density(double x, double mean)
+{
+	double a = 1 / mean;
+	return exponential_rate(x, a);
+}
 
 /*
  * Draws a andom number based on the exponential distribution.
- * 
+ *
  * a - the rate paramter of the exponential distribution, a > 0
  *
  * TODO: The algorithm is based on the C# build-in uniformyl disributed random number generator.
  *       The code is valid if exp(a) ~ - 1/a + ln()u(0,1), with the unit recangual variante u(0,1);
- *       Need to test if this is valid for rand48 as well, otherwise we have to swith to a different 
+ *       Need to test if this is valid for rand48 as well, otherwise we have to swith to a different
  */
- double exponential_rate_draw(double a)
- {
+double exponential_rate_draw(double a)
+{
 	if (a <= 0)
 	{
 		printf("Error: Paramter a for exponential_draw(double a) must be greater than 0.");
@@ -114,20 +114,20 @@ double lognormal_draw(double mode, double stdev)
 	}
 
 	return -log(drand()) / a;
- }
- 
-/*
- * Draws a andom number based on the exponential distribution using the mean 
- * for the exponential distribution to draw from.
- */
- double exponential_draw(double mean)
- {
-	 double a = 1 / mean;
-	 return exponential_rate_draw(a);
- }
+}
 
 /*
- * Beta distribution is a continuous probability function distribution 
+ * Draws a andom number based on the exponential distribution using the mean
+ * for the exponential distribution to draw from.
+ */
+double exponential_draw(double mean)
+{
+	double a = 1 / mean;
+	return exponential_rate_draw(a);
+}
+
+/*
+ * Beta distribution is a continuous probability function distribution
  * being nonzero only on the interval [0, 1].
  *
  * x - support for x in (0, 1)
@@ -138,7 +138,7 @@ double beta_density_ab(double x, double a, double b)
 {
 	// DEAD FUNCTION DO NOT USE
 	double bval = beta(a, b);
-	return pow(x, a - 1.0) * pow(1.0 -x, b - 1.0) / bval;
+	return pow(x, a - 1.0) * pow(1.0 - x, b - 1.0) / bval;
 }
 
 double beta_density_alpha_beta(double x, double alpha, double beta)
@@ -146,63 +146,47 @@ double beta_density_alpha_beta(double x, double alpha, double beta)
 	double value;
 
 	// somethings to help, but need more work here
-	if(alpha<1.0 && x<0.0010)
+	if (alpha < 1.0 && x < 0.0010)
 		x = 0.0010;
 
-	if(alpha<1.0 && x>0.9990)
+	if (alpha<1.0 && x>0.9990)
 		x = 0.9990;
 
 	// follows wikipedia page n pdf of beta distribution
 
-	value = gamma_function(alpha+beta)/(gamma_function(alpha)*gamma_function(beta));
+	value = gamma_function(alpha + beta) / (gamma_function(alpha)*gamma_function(beta));
 
-	value *= pow(x,alpha-1.0);
+	value *= pow(x, alpha - 1.0);
 
-	value *= pow(1.0-x,beta-1.0);
+	value *= pow(1.0 - x, beta - 1.0);
 
 	return value;
 }
 
 double beta_density_mean_fvar(double x, double mean, double fvar)
 {
-	double vcrit = mean*(1.0-mean); // this is the maximum possible variance
+	double vcrit = mean*(1.0 - mean); // this is the maximum possible variance
 	double variance = vcrit*fvar; // actual variance is fvar, times the maximum
 
-	double alpha = mean * (((mean*(1.0-mean))/variance)-1.0);
-	double beta = (1.0-mean) * (((mean*(1.0-mean))/variance)-1.0);
+	double alpha = mean * (((mean*(1.0 - mean)) / variance) - 1.0);
+	double beta = (1.0 - mean) * (((mean*(1.0 - mean)) / variance) - 1.0);
 
-	if(alpha<0.0)
-	{
-		printf("\n error: beta_density_mean_fvar, implied alpha is less than zero \n");
-		system("pause");
-	}
-	if(beta<0.0)
-	{
-		printf("\n error: beta_density_mean_fvar, implied beta is less than zero \n");
-		system("pause");
-	}
+	CHECK(alpha >= 0.0, "beta_density_mean_fvar, implied alpha is less than zero");
+	CHECK(beta >= 0.0, "beta_density_mean_fvar, implied beta is less than zero");
 
 	return beta_density_alpha_beta(x, alpha, beta);
 }
 
 double beta_draw_mean_fvar(double mean, double fvar)
 {
-	double vcrit = mean*(1.0-mean); // this is the maximum possible variance
+	double vcrit = mean*(1.0 - mean); // this is the maximum possible variance
 	double variance = vcrit*fvar; // actual variance is fvar, times the maximum
 
-	double alpha = mean * (((mean*(1.0-mean))/variance)-1.0);
-	double beta = (1.0-mean) * (((mean*(1.0-mean))/variance)-1.0);
+	double alpha = mean * (((mean*(1.0 - mean)) / variance) - 1.0);
+	double beta = (1.0 - mean) * (((mean*(1.0 - mean)) / variance) - 1.0);
 
-	if(alpha<0.0)
-	{
-		printf("\n error: beta_draw_mean_fvar, implied alpha is less than zero \n");
-		system("pause");
-	}
-	if(beta<0.0)
-	{
-		printf("\n error: beta_draw_mean_fvar, implied beta is less than zero \n");
-		system("pause");
-	}
+	CHECK(alpha >= 0.0, "beta_draw_mean_fvar, implied alpha is less than zero");
+	CHECK(beta >= 0.0, "beta_draw_mean_fvar, implied beta is less than zero");
 
 	return beta_draw_alpha_beta(alpha, beta);
 }
@@ -211,26 +195,26 @@ double beta_draw_mean_fvar(double mean, double fvar)
 
 double beta_draw_alpha_beta(double alpha, double beta)
 {
-	double maxval=0.0,w,tval;
+	double maxval = 0.0, w, tval;
 
-	for(int ii=0 ; ii<=100 ; ii++)
+	for (int ii = 0; ii <= 100; ii++)
 	{
-		double x = 0.0+(double)ii*0.010;
+		double x = 0.0 + (double)ii*0.010;
 		double val = beta_density_alpha_beta(x, alpha, beta);
-		if(val>maxval)
+		if (val > maxval)
 			maxval = val;
 	}
 
-	w = 1.0/(10.0*maxval);
+	w = 1.0 / (10.0*maxval);
 
-	int stop=0;
-	while(stop<1)
+	int stop = 0;
+	while (stop < 1)
 	{
-		tval = random(0.0,1.0);
+		tval = random(0.0, 1.0);
 		double vv = beta_density_alpha_beta(tval, alpha, beta);
-		if(random(0.0,1.0)<w*vv)
+		if (random(0.0, 1.0) < w*vv)
 		{
-			stop=1;
+			stop = 1;
 		}
 	}
 
@@ -239,16 +223,16 @@ double beta_draw_alpha_beta(double alpha, double beta)
 
 double beta_draw_mean_alpha(double mean, double alpha)
 {
-	double beta = alpha*((1.0/mean)-1.0);
+	double beta = alpha*((1.0 / mean) - 1.0);
 
-	return beta_draw_alpha_beta(alpha,beta);
+	return beta_draw_alpha_beta(alpha, beta);
 }
 
 
 
 double beta_density_mean_alpha(double x, double mean, double alpha)
 {
-	double beta = alpha*((1.0/mean)-1.0);
+	double beta = alpha*((1.0 / mean) - 1.0);
 
 	// follows wikipedia page n pdf of beta distribution
 
@@ -261,8 +245,8 @@ double beta_density_mean_alpha(double x, double mean, double alpha)
 
 
 /*
- * Beta distribution using mean and standard deviation. 
- * For calculation of the paramters a and b, mean = a / (a + b) and 
+ * Beta distribution using mean and standard deviation.
+ * For calculation of the paramters a and b, mean = a / (a + b) and
  * var = a*b / ((a+b)(a+b)*(a+b+1)) are used.
  */
 double beta_density(double x, double mean, double stdev)
@@ -291,7 +275,7 @@ double beta_draw_ab(int a, int b)
 
 /*
  * Probability for number of successes in a sequence
- * of n independed yes or no experiment, each of which yields with 
+ * of n independed yes or no experiment, each of which yields with
  * probability p.
  *
  * x - the number of draws to get the probability for.
@@ -300,10 +284,10 @@ double beta_draw_ab(int a, int b)
  */
 double binomial_density(int x, int n, double p)
 {
-	CHECK (n < 0, "Error: Paramter n for binamial_density(int x, int n, double p) must be greater or equal than 0.");
-	CHECK (x < 0 || x > n, "Error: Paramter x for binamial_density(int x, int n, double p) must be within [0, n].");
-	CHECK (p < 0.0 || p > 1.0, "Error: Paramter p for binamial_density(int x, int n, double p) must be within [0, 1].");
-	return filzbach::dbinom(x,n,p);
+	CHECK(n < 0, "Error: Paramter n for binamial_density(int x, int n, double p) must be greater or equal than 0.");
+	CHECK(x < 0 || x > n, "Error: Paramter x for binamial_density(int x, int n, double p) must be within [0, n].");
+	CHECK(p < 0.0 || p > 1.0, "Error: Paramter p for binamial_density(int x, int n, double p) must be within [0, 1].");
+	return filzbach::dbinom(x, n, p);
 }
 
 /*
@@ -324,7 +308,7 @@ double binomial_draw(int n, double p)
 	{
 		printf("Error: Paramter p for binamial_density(int x, int n, double p) must be within [0, 1].");
 		return nan("");
-	}	
+	}
 
 	double res = 0.0;
 
@@ -340,14 +324,14 @@ double binomial_draw(int n, double p)
 /*
  * Negative binomial density.
  *
- * k - 
- * r - r > 0 -  number of failures until the experiment is stopped 
+ * k -
+ * r - r > 0 -  number of failures until the experiment is stopped
  * p - in (0,1) - success probability in each experiment (real)
  */
 double negative_binomial_density_p(int k, int r, double p)
 {
 	if (r <= 0.0)
-	{	
+	{
 		printf("Error: Paramter n for negative_binomial_draw(double r, double p) must be greater than 0.");
 		return nan("");
 	}
@@ -361,7 +345,7 @@ double negative_binomial_density_p(int k, int r, double p)
 	int a = k + r - 1;
 	int b = r - 1;
 
-	return factorial(a) / (factorial(a-b) * factorial(b));
+	return factorial(a) / (factorial(a - b) * factorial(b));
 }
 
 /*
@@ -370,7 +354,7 @@ double negative_binomial_density_p(int k, int r, double p)
  * Calling the common negative binomial distribution with paramters k, r, and p
  * calculating the required paramters based on the forumlars r * ( p / (1-p) ) for mean
  * and r * (p / (1 - p)(1 - p)) for the variance.
- * 
+ *
  */
 double negative_binomial_density(int k, double mean, double stdev)
 {
@@ -385,7 +369,7 @@ double negative_binomial_density(int k, double mean, double stdev)
  * Calling the common negative binomial distribution with paramters k, r, and p
  * calculating the required paramters based on the forumlars r * ( p / (1-p) ) for mean
  * and r * (p / (1 - p)(1 - p)) for the variance.
- * 
+ *
  */
 double negative_binomial_density_stdev(int k, double mean, double stdev)
 {
@@ -399,15 +383,15 @@ double negative_binomial_density_stdev(int k, double mean, double stdev)
  * Negative binomial density.
  *
  * ss - number of obersvation
- * k shape 
+ * k shape
  *
  * TODO: Paramter'code' has been temporarily disabled
  */
 double negative_binomial_density_shape(int ss, double r, double shape) //, int code( 
 {
-	int code = 0; 
-	static int nbsetup=0;
-	static double (*negbinom_pzero)[10002];
+	int code = 0;
+	static int nbsetup = 0;
+	static double(*negbinom_pzero)[10002];
 
 	/* iterative procedure lifted from ecological detective */
 	int xx;
@@ -415,40 +399,40 @@ double negative_binomial_density_shape(int ss, double r, double shape) //, int c
 	double s, tk, tmean;
 	int kk, mm;
 
-	if (nbsetup<1 && code>0)
+	if (nbsetup < 1 && code>0)
 	{
 		printf("\n setting up storage array for negative binomial \n");
 		negbinom_pzero = new double[10002][10002];
 		/* set up array for power part */
-		for(kk=1 ; kk<=10000 ; kk++){
-			for(mm=1 ; mm<=10000 ; mm++)
+		for (kk = 1; kk <= 10000; kk++) {
+			for (mm = 1; mm <= 10000; mm++)
 			{
-				tk = (3.0 / 10000.0) * (double)(kk+1);
-				tmean = (5.0 / 10000.0) * (double)(mm+1);
+				tk = (3.0 / 10000.0) * (double)(kk + 1);
+				tmean = (5.0 / 10000.0) * (double)(mm + 1);
 				/* p zero  */
-				negbinom_pzero[kk][mm] = pow(tk/(tk+tmean),tk);
+				negbinom_pzero[kk][mm] = pow(tk / (tk + tmean), tk);
 			}
 		}
 		nbsetup = 1;
 	}
 
-	if (code>0 && r <= 4.95 && r>=0.00060 && shape<=2.95 && shape>=0.00040){
-		kk = (int)((shape/3.0)*10000.0);
-		mm = (int)((r/5.0)*10000.0);
+	if (code > 0 && r <= 4.95 && r >= 0.00060 && shape <= 2.95 && shape >= 0.00040) {
+		kk = (int)((shape / 3.0)*10000.0);
+		mm = (int)((r / 5.0)*10000.0);
 		// printf("\n negbinom array r %f mm %d k %f kk %d",r,mm,k,kk);
 		prob = negbinom_pzero[kk][mm];
 	}
 	else
 	{
-		prob = pow(shape/(shape+r),shape);
+		prob = pow(shape / (shape + r), shape);
 	}
 
-	if(ss>0)
+	if (ss > 0)
 	{
-		for(xx=1 ; xx<=ss ; xx++){
-			s=(double)xx;
+		for (xx = 1; xx <= ss; xx++) {
+			s = (double)xx;
 			prob_prev = prob;
-			prob = ((s+shape-1.0)/s)*(r/(shape+r))*prob_prev;
+			prob = ((s + shape - 1.0) / s)*(r / (shape + r))*prob_prev;
 		}
 	}
 
@@ -457,7 +441,7 @@ double negative_binomial_density_shape(int ss, double r, double shape) //, int c
 
 /*
  * Draws a random number out of the negative binamial distribution.
- * The form of the distribution is not the number of trials to the n-th success. 
+ * The form of the distribution is not the number of trials to the n-th success.
  *
  * n - number of trials, n >= 0
  * p - success probability, p in [0,1]
@@ -467,7 +451,7 @@ double negative_binomial_density_shape(int ss, double r, double shape) //, int c
 double negative_binomial_draw_p(double n, double p)
 {
 	if (n < 0.0)
-	{	
+	{
 		printf("Error: Paramter n for negative_binomial_draw(int n, double p) must be greater than 0.");
 		return nan("");
 	}
@@ -477,11 +461,11 @@ double negative_binomial_draw_p(double n, double p)
 		printf("Error: Paramter p for negative_binomial_draw(int n, double p) must be within [0, 1].");
 		return nan("");
 	}
-		
+
 
 	// draw Gamma random variable to determine Y.
 	double y = gamma_draw(n, 1.0);
-	y = y * p / (1.0 - p); 
+	y = y * p / (1.0 - p);
 
 	// draw Poisson random variable with mean of Y
 	return poisson_draw(y);
@@ -503,19 +487,19 @@ double negative_binomial_draw(double mean, double stdev)
  */
 void testing_neg_binom()
 {
-	int kk,mm,ss;
-	double mean,k;
+	int kk, mm, ss;
+	double mean, k;
 
-	for (mm=1 ; mm<=10 ; mm+=2)
+	for (mm = 1; mm <= 10; mm += 2)
 	{
-		for (kk=1 ; kk<=10 ; kk+=2)
+		for (kk = 1; kk <= 10; kk += 2)
 		{
-			for(ss=0 ; ss<=6 ; ss+=2)
+			for (ss = 0; ss <= 6; ss += 2)
 			{
 				mean = 0.10 * (double)mm;
 				k = 0.50 * (double)kk;
-				printf("\n mean %f k %f ss %d",mean,k,ss);
-				printf("\n act %f from_array %f",negative_binomial_density_shape(ss,mean,k/*,0*/),negative_binomial_density_shape(ss,mean,k/*,1*/));
+				printf("\n mean %f k %f ss %d", mean, k, ss);
+				printf("\n act %f from_array %f", negative_binomial_density_shape(ss, mean, k/*,0*/), negative_binomial_density_shape(ss, mean, k/*,1*/));
 			}
 		}
 	}
@@ -526,98 +510,98 @@ void testing_neg_binom()
  */
 double normal_density(double n, double mean, double stdev)
 {
-	static int nsetup=0;
+	static int nsetup = 0;
 
-	double temp,ratio,tval,tmean,tstdev,tvar;
+	double temp, ratio, tval, tmean, tstdev, tvar;
 	int rr;
 	double mult;
 
-	if(nsetup<1)
+	if (nsetup < 1)
 	{
-		ncon=sqrt(2.0*3.1415927);
+		ncon = sqrt(2.0*3.1415927);
 
 		/* set up array that stores density vs ratio of deviation to stdev */
-		for(rr=0 ; rr<=10000 ; rr++)
+		for (rr = 0; rr <= 10000; rr++)
 		{
-			ratio=(((double)rr)/10000.0)*12.0; /* only go up to 60 stdevs -- that's a lot!! */
-			tmean=100.0;
-			tstdev=100.0;
-			tval=tmean+(ratio*tstdev);
-			tvar=tstdev*tstdev;
+			ratio = (((double)rr) / 10000.0)*12.0; /* only go up to 60 stdevs -- that's a lot!! */
+			tmean = 100.0;
+			tstdev = 100.0;
+			tval = tmean + (ratio*tstdev);
+			tvar = tstdev*tstdev;
 			// temp=1.0/sqrt(2.0*3.1415927*tvar); /* constant not independent of mean and val */
-			temp=exp(((-1.0)*pow(tval-tmean,2.0))/(2.0*tvar)); /* ...but this part is (i think!) */
-			narray[rr]=temp;
+			temp = exp(((-1.0)*pow(tval - tmean, 2.0)) / (2.0*tvar)); /* ...but this part is (i think!) */
+			narray[rr] = temp;
 			// if(rr%10==0) printf("\n %d --> %f ",rr,temp);
 		}
 	}
 
-	nsetup=1;
+	nsetup = 1;
 
 	/* calc ratio of (val-mean) to stdev */
-	ratio=(fabs(n-mean))/stdev;
-	ratio=(ratio/12.0)*10000.0;
+	ratio = (fabs(n - mean)) / stdev;
+	ratio = (ratio / 12.0)*10000.0;
 	temp = 0;
-	if ((ratio<=9999) && (ratio>=0))
+	if ((ratio <= 9999) && (ratio >= 0))
 	{
-		rr=(int)(ratio);
+		rr = (int)(ratio);
 
-		mult=narray[rr];
-		temp=1.0/(ncon*stdev);
+		mult = narray[rr];
+		temp = 1.0 / (ncon*stdev);
 		// temp = 1.0/(sqrt(2.0*3.1415927)*stdev); /* constant not independent of mean and val */
-		temp*=mult;
+		temp *= mult;
 	}
 	/*
 	printf(" | q:%f",temp);
 	mult = exp(((-1.0)*pow(val-mean,2.0))/(2.0*stdev*stdev));
-	temp = 1.0/(sqrt(2.0*3.1415927)*stdev); 
+	temp = 1.0/(sqrt(2.0*3.1415927)*stdev);
 	temp*=mult;
 	printf(",s:%f |",temp);
 	*/
 
-	if(temp<0.00000000010)
-		temp=0.00000000010;
+	if (temp < 0.00000000010)
+		temp = 0.00000000010;
 
 	return temp;
 }
 
 double gaussian(double x, double mean, double sigma)
 {
-	static int gsetup=0;
+	static int gsetup = 0;
 	static double height[201];
 
 	double temp;
-	double edev1,edev2;
-	int i,i1,i2;
+	double edev1, edev2;
+	int i, i1, i2;
 
-	if(gsetup<1)
+	if (gsetup < 1)
 	{
 		// do 100 different values of scaled deviation from mean and store in static array for lookup hereafter
-		for(i = 0 ; i<=200 ; i++)
+		for (i = 0; i <= 200; i++)
 		{
-			double scdev = 10.0 * (((double)i)/200.0);
-			height[i] = exp((-1.0) * pow(scdev,2.0));
+			double scdev = 10.0 * (((double)i) / 200.0);
+			height[i] = exp((-1.0) * pow(scdev, 2.0));
 		}
-		gsetup=1;
+		gsetup = 1;
 	}
 
 	// calculate scdev for this lookup
-	double scdev = (x-mean)/sigma;
-	if(scdev<0.0)
-		scdev*=-1.0;
+	double scdev = (x - mean) / sigma;
+	if (scdev < 0.0)
+		scdev *= -1.0;
 
 	// now lookup if scdev<5.0 or calculate raw otherwise
-	if(scdev<10.0)
+	if (scdev < 10.0)
 	{
-		i1 = (int)((scdev/10.0)*200.0);
-		edev1 = ((double)i1)*(10.0/200.0);
-		i2 = i1+1;
-		edev2 = ((double)i2)*(10.0/200.0);
+		i1 = (int)((scdev / 10.0)*200.0);
+		edev1 = ((double)i1)*(10.0 / 200.0);
+		i2 = i1 + 1;
+		edev2 = ((double)i2)*(10.0 / 200.0);
 		// interpolate
-		temp = ((scdev-edev1)/(edev2-edev1))*height[i2] + ((edev2-scdev)/(edev2-edev1))*height[i1];
+		temp = ((scdev - edev1) / (edev2 - edev1))*height[i2] + ((edev2 - scdev) / (edev2 - edev1))*height[i1];
 	}
 	else
 	{
-		temp = exp((-1.0) * pow(scdev,2.0));
+		temp = exp((-1.0) * pow(scdev, 2.0));
 	}
 
 	return temp;
@@ -643,21 +627,21 @@ double normal_draw(double mean, double stdev)
 		do {
 			U1 = drand();
 			U2 = drand();
-			V1 = (2.0*U1)-1.0;
-			V2 = (2.0*U2)-1.0;
-			S = (V1*V1)+(V2*V2);
-		} while (S>=1.0);
+			V1 = (2.0*U1) - 1.0;
+			V2 = (2.0*U2) - 1.0;
+			S = (V1*V1) + (V2*V2);
+		} while (S >= 1.0);
 
-		fac = sqrt(-2.0 * (log(S)/S));
+		fac = sqrt(-2.0 * (log(S) / S));
 		Z = V1 * fac;
 		normal_draw_phase2 = true;
 	}
 
-	Z*=stdev;
-	Z+=mean;
+	Z *= stdev;
+	Z += mean;
 
 	return Z;
-} 
+}
 
 /*
  * Gamma density.
@@ -692,12 +676,12 @@ double gamma_density_scale(double n, double shape, double scale)
  *
  * n observations
  * mean
- * shape 
+ * shape
  */
 
-// mean -> mean
-// z = observation
-// n shape paramte
+ // mean -> mean
+ // z = observation
+ // n shape paramte
 double gamma_density_shape(double n, double mean, double shape)
 {
 	double cap_rho;
@@ -707,17 +691,17 @@ double gamma_density_shape(double n, double mean, double shape)
 	double f_z;
 	double a;
 	int numit;
-	double comp,comp2;
+	double comp, comp2;
 	int ii;
 
 	/* Christian -- this little section looks a bit worrying but I can't remember whether it really matters or not! */
 
 	/* correction because when n gets very small this approx is not good */
-	if(shape<0.0020)
-		shape=0.0020;
+	if (shape < 0.0020)
+		shape = 0.0020;
 	/* same for z value */
-	if(n<0.0020)
-		n=0.0020;
+	if (n < 0.0020)
+		n = 0.0020;
 
 	/* this is the trick with the mean */
 
@@ -725,35 +709,35 @@ double gamma_density_shape(double n, double mean, double shape)
 
 	/* write ck values for use a little later*/
 
-	ck[1]=1.0;
-	ck[2]=0.5772156649015329;
-	ck[3]=-0.6558780715202538;
-	ck[4]=-0.0420026350340952;
-	ck[5]=0.1665386113822915;
-	ck[6]=-0.0421977345555443;
-	ck[7]=-0.0096219715278770;
-	ck[8]=0.0072189432466630;
-	ck[9]=-0.0011651675918591;
-	ck[10]=-0.0002152416741149;
-	ck[11]=0.0001280502823882;
-	ck[12]=-0.0000201348547807;
-	ck[13]=-0.0000012504934821;
-	ck[14]=0.0000011330272320;
-	ck[15]=-0.0000002056338417;
-	ck[16]=0.0000000061160950;
-	ck[17]=0.0000000050020075;
-	ck[18]=-0.0000000011812746;
-	ck[19]=0.0000000001043427;
+	ck[1] = 1.0;
+	ck[2] = 0.5772156649015329;
+	ck[3] = -0.6558780715202538;
+	ck[4] = -0.0420026350340952;
+	ck[5] = 0.1665386113822915;
+	ck[6] = -0.0421977345555443;
+	ck[7] = -0.0096219715278770;
+	ck[8] = 0.0072189432466630;
+	ck[9] = -0.0011651675918591;
+	ck[10] = -0.0002152416741149;
+	ck[11] = 0.0001280502823882;
+	ck[12] = -0.0000201348547807;
+	ck[13] = -0.0000012504934821;
+	ck[14] = 0.0000011330272320;
+	ck[15] = -0.0000002056338417;
+	ck[16] = 0.0000000061160950;
+	ck[17] = 0.0000000050020075;
+	ck[18] = -0.0000000011812746;
+	ck[19] = 0.0000000001043427;
 
 	/* calc constant cap_rho(n) */
 
 	/* recurrence relation thing (see hilborn and mangel) */
 	numit = (int)shape;
 	comp = (double)numit;
-	comp2 = shape-comp;
+	comp2 = shape - comp;
 	//so, comp2 is now in the range 0-1, which when addded to comp, gives our original n (here, n is notated as shape, sorry)
 	/* if n is a whole number then potential prob -- need to correct as follows */
-	if (fabs(comp-shape)<0.001)
+	if (fabs(comp - shape) < 0.001)
 	{
 		comp2 += 1.0;
 		numit -= 1;
@@ -761,51 +745,51 @@ double gamma_density_shape(double n, double mean, double shape)
 
 
 	/* calc fraction part */
-	cknk_sum=0.0;
-	for (k=1 ; k<=19 ; k++)
+	cknk_sum = 0.0;
+	for (k = 1; k <= 19; k++)
 	{
-		cknk_sum += ck[k] * pow(comp2,(double)k);
+		cknk_sum += ck[k] * pow(comp2, (double)k);
 	}
 
 	cap_rho = 1.0 / cknk_sum;
 
 
 
-	for (ii=1 ; ii<=numit ; ii++)
+	for (ii = 1; ii <= numit; ii++)
 	{
-		cap_rho *= shape-(1.0*((double)ii));
+		cap_rho *= shape - (1.0*((double)ii));
 	}
 
 	/* calc f_z */
 
 	// notation not great here. Matching to Hilborn and Mangel (page 77) we have their f_z = our f_z, their cap_rho_n = our cap_rho, their n = our shape, their a = our a, their z = our n.
 	// so, above, cap_rho of n means 
-	f_z = (pow(a,shape)/(cap_rho)) * exp((-1.0)*a*n) * pow(n,shape-1);
+	f_z = (pow(a, shape) / (cap_rho)) * exp((-1.0)*a*n) * pow(n, shape - 1);
 
 	return f_z;
 }
 
 double gamma_draw(double mean, double stdev)
 {
-	return nan("");
+	throw "not implemented";
 }
 
 /*
- * Draws a single random number out of the gamma distribution with 
+ * Draws a single random number out of the gamma distribution with
  * a given scale and shape.
  */
 double gamma_draw_shape(int scale, double shape)
 {
 	double res = 0.0;
 
-	for (int i = 0; i < scale; i++)	
-		res += -log(drand()) / shape;	
+	for (int i = 0; i < scale; i++)
+		res += -log(drand()) / shape;
 
 	return res;
 }
 
 /*
- * Draws a single random number out of the gamma distribution with 
+ * Draws a single random number out of the gamma distribution with
  * a given scale and mean.
  */
 double gamma_draw_mean(int scale, double mean)
@@ -815,69 +799,69 @@ double gamma_draw_mean(int scale, double mean)
 }
 
 /*
- * Draws a single random number out of the gamma distribution with 
+ * Draws a single random number out of the gamma distribution with
  * a given scale and standard deviation.
  */
 extern double gamma_draw_stdev(int scale, double stdev)
 {
-	double shape = (stdev * stdev)  / (scale * scale);
+	double shape = (stdev * stdev) / (scale * scale);
 	return gamma_draw(scale, shape);
 }
 
 double gamma_function(double n)
 {
-	
+
 	/* write ck values for use a little later*/
 	double ck[21];
 
-	ck[1]=1.0;
-	ck[2]=0.5772156649015329;
-	ck[3]=-0.6558780715202538;
-	ck[4]=-0.0420026350340952;
-	ck[5]=0.1665386113822915;
-	ck[6]=-0.0421977345555443;
-	ck[7]=-0.0096219715278770;
-	ck[8]=0.0072189432466630;
-	ck[9]=-0.0011651675918591;
-	ck[10]=-0.0002152416741149;
-	ck[11]=0.0001280502823882;
-	ck[12]=-0.0000201348547807;
-	ck[13]=-0.0000012504934821;
-	ck[14]=0.0000011330272320;
-	ck[15]=-0.0000002056338417;
-	ck[16]=0.0000000061160950;
-	ck[17]=0.0000000050020075;
-	ck[18]=-0.0000000011812746;
-	ck[19]=0.0000000001043427;
+	ck[1] = 1.0;
+	ck[2] = 0.5772156649015329;
+	ck[3] = -0.6558780715202538;
+	ck[4] = -0.0420026350340952;
+	ck[5] = 0.1665386113822915;
+	ck[6] = -0.0421977345555443;
+	ck[7] = -0.0096219715278770;
+	ck[8] = 0.0072189432466630;
+	ck[9] = -0.0011651675918591;
+	ck[10] = -0.0002152416741149;
+	ck[11] = 0.0001280502823882;
+	ck[12] = -0.0000201348547807;
+	ck[13] = -0.0000012504934821;
+	ck[14] = 0.0000011330272320;
+	ck[15] = -0.0000002056338417;
+	ck[16] = 0.0000000061160950;
+	ck[17] = 0.0000000050020075;
+	ck[18] = -0.0000000011812746;
+	ck[19] = 0.0000000001043427;
 
 	/* recurrence relation thing (see hilborn and mangel) */
 	int numit = (int)n;
 	double n_I = (double)numit;
-	double n_f = n-n_I;
+	double n_f = n - n_I;
 	//so, n_f is now in the range 0-1, which when addded to n_I, gives our original n 
 	/* if n is already whole number then potential prob -- need to correct as follows */
-	if (fabs(n_I-n)<0.001)
+	if (fabs(n_I - n) < 0.001)
 	{
 		n_f += 1.0;
 		numit -= 1;
 	}
 
 	/* calc rho(n_f) */
-	double cknk_sum=0.0;
-	for (int k=1 ; k<=19 ; k++)
+	double cknk_sum = 0.0;
+	for (int k = 1; k <= 19; k++)
 	{
-		cknk_sum += ck[k] * pow(n_f,(double)k);
+		cknk_sum += ck[k] * pow(n_f, (double)k);
 	}
 	double cap_rho = 1.0 / cknk_sum;
 
 	// then do the easy multiplication bit
-	for (int ii=1 ; ii<=numit ; ii++)
+	for (int ii = 1; ii <= numit; ii++)
 	{
-		cap_rho *= n-(1.0*((double)ii));
+		cap_rho *= n - (1.0*((double)ii));
 	}
 
 	return cap_rho;
-	
+
 }
 
 
@@ -888,37 +872,37 @@ double gamma_function(double n)
  */
 double factorial(int k)
 {
-	static int ldone=0;
+	static int ldone = 0;
 	static double faclist[201];
 
-	double val=1;
-	int ii,vv;
-	
-	if (ldone<1)
+	double val = 1;
+	int ii, vv;
+
+	if (ldone < 1)
 	{
-		ldone=1;
-		faclist[0]=1.0;
-		for (vv=1 ; vv<=200 ; vv++)
+		ldone = 1;
+		faclist[0] = 1.0;
+		for (vv = 1; vv <= 200; vv++)
 		{
-			val=1;
-			for( ii=2 ; ii<=vv ; ii++)
+			val = 1;
+			for (ii = 2; ii <= vv; ii++)
 			{
-				val*=(double)ii;
+				val *= (double)ii;
 			}
-			faclist[vv]=val;
+			faclist[vv] = val;
 		}
 	}
 
-	if(k<=200)
+	if (k <= 200)
 	{
 		return faclist[k];
 	}
 	else
 	{
-		val=1;
-		for(ii=2 ; ii<=k ; ii++)
+		val = 1;
+		for (ii = 2; ii <= k; ii++)
 		{
-			val*=(double)ii;
+			val *= (double)ii;
 		}
 	}
 
@@ -933,7 +917,7 @@ double factorial(int k)
  */
 double poisson_density(int n, double lambda)
 {
-	return filzbach::dpois(n,lambda);
+	return filzbach::dpois(n, lambda);
 }
 
 
@@ -943,50 +927,50 @@ double poisson_density(int n, double lambda)
 int poisson_draw(double lambda)
 {
 	double ell = exp((-1.0)*lambda);
-	int k=0;
-	double p=1.0;
+	int k = 0;
+	double p = 1.0;
 
-	if (lambda<30.0)
+	if (lambda < 30.0)
 	{
-		while(p >= ell)
+		while (p >= ell)
 		{
 			k++;
 			p *= drand();
 		}
-		return k-1;
+		return k - 1;
 	}
 	else
 	{
-		return (int)normal_draw(lambda,sqrt(lambda));
+		return (int)normal_draw(lambda, sqrt(lambda));
 	}
 }
 
 
 /*
- * 
+ *
  */
 double spearman_rank(double xx[], double yy[], int n)
 {
-	double *xrank = new double[n]; 
+	double *xrank = new double[n];
 	double *yrank = new double[n];
 	short int *used_x = new short int[n];
 	short int *used_y = new short int[n];
-	
-	for (int p = 0; p < n; p++) 
+
+	for (int p = 0; p < n; p++)
 	{
 		used_x[p] = 0;
 		used_y[p] = 0;
 	}
-	
+
 	/* ranks for xvals */
-	for(int x1 = 0; x1 < n; x1++)
+	for (int x1 = 0; x1 < n; x1++)
 	{
 		int pos = -1;
 		double min = 999999.0;
 
-		for(int x2 = 0; x2 < n; x2++)
-		{			
-			if(used_x[x2] < 1 && xx[x2] < min)
+		for (int x2 = 0; x2 < n; x2++)
+		{
+			if (used_x[x2] < 1 && xx[x2] < min)
 			{
 				min = xx[x2];
 				pos = x2;
@@ -998,20 +982,20 @@ double spearman_rank(double xx[], double yy[], int n)
 			xrank[pos] = x1 + 1;
 			used_x[pos] = 1;
 		}
-	}		
+	}
 
 	/* ranks for yvals */
-	for(int y1 = 0; y1 < n; y1++)
+	for (int y1 = 0; y1 < n; y1++)
 	{
 		int pos = -1;
 		double min = 999999.0;
 
-		for(int y2 = 0; y2<n; y2++)
+		for (int y2 = 0; y2 < n; y2++)
 		{
-			if(used_y[y2] < 1 && yy[y2] < min)
+			if (used_y[y2] < 1 && yy[y2] < min)
 			{
 				min = yy[y2];
-				pos = y2;  
+				pos = y2;
 			}
 		}
 
@@ -1022,8 +1006,8 @@ double spearman_rank(double xx[], double yy[], int n)
 		}
 	}
 
-	double sumdifs=0.0;
-	for (int i=0 ; i<n ; i++)
+	double sumdifs = 0.0;
+	for (int i = 0; i < n; i++)
 	{
 		double dif = (double)xrank[i] - (double)yrank[i];
 		sumdifs += dif*dif;
@@ -1037,48 +1021,48 @@ double spearman_rank(double xx[], double yy[], int n)
  */
 void test_spearman()
 {
-	double xvals[6]={0.50,1.0,1.50,2.0,2.50,3.0};
-	double yvals[6]={3.0,2.50,2.0,1.50,1.0,0.50};
+	double xvals[6] = { 0.50,1.0,1.50,2.0,2.50,3.0 };
+	double yvals[6] = { 3.0,2.50,2.0,1.50,1.0,0.50 };
 	double rs;
 
 	printf("\n testing SPEARMAN \n");
-	rs = spearman_rank(xvals,yvals,6);
-	printf(" rs = %f \n",rs);
-} 
+	rs = spearman_rank(xvals, yvals, 6);
+	printf(" rs = %f \n", rs);
+}
 
 /*
  *
  */
 double logistic(double emm)
 {
-	static int logit_setup=0;
+	static int logit_setup = 0;
 	static double *logit_array;
 	int bin;
-	double etm,rval;
+	double etm, rval;
 
-	if(logit_setup<1)
+	if (logit_setup < 1)
 	{
 		/* set up array */
 		logit_array = new double[20002];
 
-		for(bin = 0 ; bin<=20000 ; bin++)
+		for (bin = 0; bin <= 20000; bin++)
 		{
 			etm = (double)bin - 10000.0;
 			etm /= 1000.0;
-			logit_array[bin]=1.0/(1.0+exp((-1.0)*etm));
+			logit_array[bin] = 1.0 / (1.0 + exp((-1.0)*etm));
 		}
-		logit_setup=1;
+		logit_setup = 1;
 	}
 
-	bin = (int)((emm*1000.0)+10000.0);
+	bin = (int)((emm*1000.0) + 10000.0);
 
-	if (bin>0 && bin<20000)
+	if (bin > 0 && bin < 20000)
 	{
 		rval = logit_array[bin];
 	}
 	else
 	{
-		rval = 1.0 / (1.0+exp((-1.0)*emm));
+		rval = 1.0 / (1.0 + exp((-1.0)*emm));
 		// printf("\t logit outside bin range ");
 	}
 
@@ -1094,30 +1078,30 @@ void testing_logit()
 	int kk;
 	double tval;
 
-	for (kk=1 ; kk<=100 ; kk++)
+	for (kk = 1; kk <= 100; kk++)
 	{
-		emm = -5.0+(0.10*(double)kk);
-		tval = 1.0/(1.0+exp((-1.0)*emm));
-		printf("\n true logit %f",tval);
-		printf("\t logit returned %f",logistic(emm));
+		emm = -5.0 + (0.10*(double)kk);
+		tval = 1.0 / (1.0 + exp((-1.0)*emm));
+		printf("\n true logit %f", tval);
+		printf("\t logit returned %f", logistic(emm));
 	}
 }
 
 
-
+#if !defined(drand)
 /*
  * Random floating point number, uniform distribution from [0, 1)
  */
 double drand()
 {
 	double r;
-	#pragma omp critical
+#pragma omp critical
 	{
 		r = ((double)rand()) / (1.0 + (double)RAND_MAX);
 	}
 	return r;
-} 
-
+}
+#endif
 /*
  *	Gamma method based on Lanczos approximation.
  */
@@ -1137,7 +1121,7 @@ double gamma(double x)
 	coef[7] = 9.9843695780195716e-6;
 	coef[8] = 1.5056327351493116e-7;
 
-	if ( x < 0.5)
+	if (x < 0.5)
 		return M_PI / (sin(M_PI * x) * gamma(1.0 - x));
 
 	x -= 1.0;
@@ -1163,13 +1147,13 @@ double beta(double x, double y)
 /***********************************************/
 double random(double lb, double ub)
 {
-	return lb + drand()*(ub-lb);
+	return lb + drand()*(ub - lb);
 }
 
 /***********************************************/
 int random_integer(int lb, int ub)
 {
-	return lb + (int)( ((double)(ub-lb+1))*drand() );
+	return lb + (int)(((double)(ub - lb + 1))*drand());
 }
 
 /**********************************************
@@ -1179,38 +1163,30 @@ int random_integer(int lb, int ub)
 
 double large(double value[], int lid, int uid, int num)
 {
-	int nn,ii,used[100001],maxid=0,hits;
+	int nn, ii, used[100001], maxid = 0, hits;
 	double maxval = log(0.0); // -Infinity
 
-	if(uid>100000)
-	{
-		printf("\n error in 'large' -- can only deal with lists with indices up to 100,000 -- sorry \n");
-		system("pause");
-		return -1;
-	}
-	else
-	{
-		for(ii=lid ; ii<=uid ; ii++)
-			used[ii]=0;
+	CHECK(uid <= 100000, "can only deal with lists with indices up to 100,000 -- sorry");
+	for (ii = lid; ii <= uid; ii++)
+		used[ii] = 0;
 
-		for(nn=1 ; nn<=num ; nn++)
+	for (nn = 1; nn <= num; nn++)
+	{
+		hits = 0;
+		for (ii = lid; ii <= uid; ii++)
 		{
-			hits=0;
-			for(ii=lid ; ii<=uid ; ii++)
+			if (used[ii] < 1)
 			{
-				if(used[ii]<1)
+				hits++;
+				if (value[ii] > maxval || hits == 1)
 				{
-					hits++;
-					if(value[ii]>maxval || hits==1)
-					{
-						maxval = value[ii];
-						maxid = ii;
-					}
+					maxval = value[ii];
+					maxid = ii;
 				}
-			} // ii loop
-			used[maxid]=1;
-		} // nn loop
-	}
+			}
+		} // ii loop
+		used[maxid] = 1;
+	} // nn loop
 
 	return value[maxid];
 
@@ -1219,38 +1195,30 @@ double large(double value[], int lid, int uid, int num)
 /***********************************************/
 double large(float value[], int lid, int uid, int num)
 {
-	int nn,ii,used[100001],maxid=0,hits;
+	int nn, ii, used[100001], maxid = 0, hits;
 	double maxval = log(0.0); // -Infinity
 
-	if(uid>100000)
-	{
-		printf("\n error in 'large' -- can only deal with lists with indices up to 100,000 -- sorry \n");
-		system("pause");
-		return -1;
-	}
-	else
-	{
-		for(ii=lid ; ii<=uid ; ii++)
-			used[ii]=0;
+	CHECK(uid <= 100000, "can only deal with lists with indices up to 100,000 -- sorry");
+	for (ii = lid; ii <= uid; ii++)
+		used[ii] = 0;
 
-		for(nn=1 ; nn<=num ; nn++)
+	for (nn = 1; nn <= num; nn++)
+	{
+		hits = 0;
+		for (ii = lid; ii <= uid; ii++)
 		{
-			hits=0;
-			for(ii=lid ; ii<=uid ; ii++)
+			if (used[ii] < 1)
 			{
-				if(used[ii]<1)
+				hits++;
+				if (value[ii] > maxval || hits == 1)
 				{
-					hits++;
-					if(value[ii]>maxval || hits==1)
-					{
-						maxval = value[ii];
-						maxid = ii;
-					}
+					maxval = value[ii];
+					maxid = ii;
 				}
-			} // ii loop
-			used[maxid]=1;
-		} // nn loop
-	}
+			}
+		} // ii loop
+		used[maxid] = 1;
+	} // nn loop
 
 	return value[maxid];
 
@@ -1259,39 +1227,31 @@ double large(float value[], int lid, int uid, int num)
 /***********************************************/
 double large(int value[], int lid, int uid, int num)
 {
-	int nn,ii,used[100001],maxid=0,hits;
-	int maxval = value[0]-1;
-	for (int i=1; i<lid; i++) if (maxval>=value[i]) maxval=value[i]-1;
+	int nn, ii, used[100001], maxid = 0, hits;
+	int maxval = value[0] - 1;
+	for (int i = 1; i < lid; i++) if (maxval >= value[i]) maxval = value[i] - 1;
 
-	if(uid>100000)
-	{
-		printf("\n error in 'large' -- can only deal with lists with indices up to 100,000 -- sorry \n");
-		system("pause");
-		return -1;
-	}
-	else
-	{
-		for(ii=lid ; ii<=uid ; ii++)
-			used[ii]=0;
+	CHECK(uid <= 100000, "can only deal with lists with indices up to 100,000 -- sorry");
+	for (ii = lid; ii <= uid; ii++)
+		used[ii] = 0;
 
-		for(nn=1 ; nn<=num ; nn++)
+	for (nn = 1; nn <= num; nn++)
+	{
+		hits = 0;
+		for (ii = lid; ii <= uid; ii++)
 		{
-			hits=0;
-			for(ii=lid ; ii<=uid ; ii++)
+			if (used[ii] < 1)
 			{
-				if(used[ii]<1)
+				hits++;
+				if (value[ii] > maxval || hits == 1)
 				{
-					hits++;
-					if(value[ii]>maxval || hits==1)
-					{
-						maxval = value[ii];
-						maxid = ii;
-					}
+					maxval = value[ii];
+					maxid = ii;
 				}
-			} // ii loop
-			used[maxid]=1;
-		} // nn loop
-	}
+			}
+		} // ii loop
+		used[maxid] = 1;
+	} // nn loop
 
 	return value[maxid];
 
@@ -1299,5 +1259,5 @@ double large(int value[], int lid, int uid, int num)
 
 void initialize_stat()
 {
-	normal_draw_phase2=false;
+	normal_draw_phase2 = false;
 }

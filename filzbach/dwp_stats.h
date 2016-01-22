@@ -22,6 +22,8 @@ double gamma_draw_shape(int, double);
 double gamma_draw_mean(int, double);
 double gamma_draw_stdev(int, double);
 double beta_draw_ab(int, int);
+#if !defined(drand)
 double drand();
+#endif
 
 #endif // DWP_STATS_H
