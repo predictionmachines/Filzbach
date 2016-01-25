@@ -62,7 +62,7 @@
     <ClCompile>
       <PreprocessorDefinitions>FILZBACH_LIB;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -111,14 +111,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\filzbach.h" />
-    <ClInclude Include="Backup.h" />
     <ClInclude Include="catherine_loader.h" />
     <ClInclude Include="dwp_metropolis.h" />
     <ClInclude Include="dwp_stats.h" />
     <ClInclude Include="dwp_table.h" />
     <ClInclude Include="params.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

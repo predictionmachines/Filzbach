@@ -1,0 +1,5 @@
+version: 1.0.{build}
+environment:
+  VisualStudioVersion: 14.0
+build:
+  verbosity: minimal

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "catherine_loader.h"
-#include <assert.h>
+#include <cassert>
 
 namespace filzbach {
 
