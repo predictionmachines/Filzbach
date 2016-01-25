@@ -1,7 +1,7 @@
 Package: filzbach
 Type: Package
 Title: Filzbach MCMC sampler
-Version: 1.2-1
+Version: 1.2-2
 Date: 2015-09-28
 Author: Vassily Lyutsarev [aut, cre],
   Drew Purves [aut] (creator of the original filzbach C code)
