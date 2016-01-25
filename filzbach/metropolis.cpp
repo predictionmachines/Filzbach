@@ -11,7 +11,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #define _chdir chdir
-inline int _mkdir(const char* dirname) { mkdir(dirname, 0777); }
+inline int _mkdir(const char* dirname) { return mkdir(dirname, 0777); }
 #define strcpy_s(dest,bufsize,source) strncpy(dest,source,bufsize)
 #define strcat_s(dest,bufsize,source) strncat(dest,source,bufsize)
 #endif
