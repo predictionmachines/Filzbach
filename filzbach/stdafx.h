@@ -11,12 +11,10 @@
 #define _USE_MATH_DEFINES
 #define _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES 1
 
-#include "targetver.h"
-
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <cmath>
 #include <memory>
 #include <limits>
 const double MISSING_VALUE = -999.0;
@@ -39,13 +37,20 @@ const char ws_dir[] = "./workspace";
 
 
 #ifndef WIN32
+#define __max(a,b) (((a) > (b)) ? (a) : (b))
+#define __min(a,b) (((a) < (b)) ? (a) : (b))
 #define strcpy_s(dest,bufsize,source) strncpy(dest,source,bufsize)
 #define strcat_s(dest,bufsize,source) strncat(dest,source,bufsize)
+#include <cstdarg>
 template <size_t size>
 int sprintf_s(
    char (&buffer)[size],
    const char *format, ... 
-) {va_list vargs; return snprintf(buffer, size, format, vargs);}
+	) {
+	va_list vargs; 
+	va_start(vargs, format);  
+	return vsnprintf(buffer, size, format, vargs);
+}
 #endif
 
 #endif // TDAFX_H_H 

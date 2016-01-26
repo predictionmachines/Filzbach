@@ -92,8 +92,9 @@ extern "C" SEXP filzbachRunMCMC(SEXP args) // (burnin, eststeps, likelihood, sam
 	lambda = [call_likelihood,sample_size, param_defs, env](){R_likelihood(call_likelihood, sample_size, param_defs, env);};
 	pfn_likelihood=relay;
 	set_thinning(asInteger(thinning));
+	GetRNGstate();
 	runmcmc(asInteger(CADR(args)),asInteger(CADDR(args)),100,100);
-
+	PutRNGstate();
 	UNPROTECT(1);
 	// compute resulting matrix dimensions
 	int param_len=0;
