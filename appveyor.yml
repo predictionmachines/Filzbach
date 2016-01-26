@@ -1,7 +1,0 @@
-version: 1.2.2.{build}
-install:
-  - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-environment:
-  VisualStudioVersion: 14.0
-build:
-  verbosity: minimal
